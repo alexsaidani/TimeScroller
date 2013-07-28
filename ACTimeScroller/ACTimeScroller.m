@@ -132,6 +132,8 @@
 
 - (void)captureTableViewAndScrollBar
 {
+    float iOS7 = 7.0;
+    
     _tableView = [self.delegate tableViewForTimeScroller:self];
     
     self.frame = CGRectMake(CGRectGetWidth(self.frame) - 10.0f, 0.0f, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
@@ -142,12 +144,25 @@
         {
             UIImageView *imageView = (UIImageView *)subview;
             
-            if (imageView.frame.size.width == 7.0f)
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] < iOS7)
             {
-                imageView.clipsToBounds = NO;
-                [imageView addSubview:self];
-                _scrollBar = imageView;
-                _savedTableViewSize = _tableView.frame.size;
+                if (imageView.frame.size.width == 7.0f)
+                {
+                    imageView.clipsToBounds = NO;
+                    [imageView addSubview:self];
+                    _scrollBar = imageView;
+                    _savedTableViewSize = _tableView.frame.size;
+                }
+            }
+            else if ([[[UIDevice currentDevice] systemVersion] floatValue] >= iOS7)
+            {
+                if (imageView.frame.size.width == 3.5f)
+                {
+                    imageView.clipsToBounds = NO;
+                    [imageView addSubview:self];
+                    _scrollBar = imageView;
+                    _savedTableViewSize = _tableView.frame.size;
+                }
             }
         }
     }
